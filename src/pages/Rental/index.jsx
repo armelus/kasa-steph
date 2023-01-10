@@ -1,11 +1,9 @@
-import data from '../../assets/logements.json'
 import styled from 'styled-components'
-import {useSearchParams} from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import './rental.css';
 import star_full from '../../assets/star_rate-24px 5.svg';
 import star_empty from '../../assets/star_rate-24px 2.svg';
 import CollapsibleCard from '../../components/CollapsibleCard/index.jsx';
-import { Navigate } from "react-router-dom";
 import { Link } from 'react-router-dom'
 
 
@@ -91,67 +89,64 @@ const h2Style = {
 
 function Rental(props) {
     /*  get product id with useSearchParams Hook */
-    const [searchParams] = useSearchParams();
-    const productId = searchParams.get('id');
-    const rental = data.find(({id}) => id === productId);
+    // const [searchParams] = useSearchParams();
+    // const productId = searchParams.get('id');
+    const { rental } = useLoaderData();
     const equipments = [];
     for (const [key, value] of Object.entries(rental.equipments)) {
         equipments.push(<li key={'equip-' + key}>{value}</li>);
     }
-    const stars= [];
-    for (let i=0;i<rental.rating;i++) {
-        stars.push(<img src={star_full} alt="star full"></img>)
+    const stars = [];
+    for (let i = 0; i < rental.rating; i++) {
+        stars.push(<img src={star_full} alt="star full" key={"start_full-" + i}></img>)
     }
-    for (let i=rental.rating;i<5;i++){
-        stars.push(<img src={star_empty} alt="star empty"></img>)
+    for (let i = rental.rating; i < 5; i++) {
+        stars.push(<img src={star_empty} alt="star empty" key={"start_empty-" + i}></img>)
     }
     const tags = [];
     for (const [key, value] of Object.entries(rental.tags)) {
-        tags.push(<Link className="linkTag" to={`/features?id=${productId}&tag=${value}`}>
+        tags.push(<Link className="linkTag" to={`/carousel/${rental.id}?tag=${value}`} key={"tag-" + key}>
             <p key={'equip-' + key} className='tag'>{value}</p>
-            </Link>);
+        </Link>);
     }
     const tab = [
-        { title: 'Description'
-        , description: rental.description 
-      },
-      { title: 'Equipements'
-        , description: equipments
-      }]
-      let productFound= data.find(({id}) => id === productId ) ; /*productId c67ab8a72*/
+        {
+            title: 'Description'
+            , description: rental.description
+        },
+        {
+            title: 'Equipements'
+            , description: equipments
+        }]
+    //   let productFound= data.find(({id}) => id === productId ) ; /*productId c67ab8a72*/
     return (
-        <PageContainer>
-            {! productFound && (
-          <Navigate to="/Error" replace={true} />
-            )}
-            <div key={rental.id}>
-                <ImgContainer>
-                    <img src={rental.cover} alt={rental.title}></img>
-                </ImgContainer>
-                <HeaderContainer>
-                    <TitleContainer>
-                        <h1 style={h1Style}>{rental.title}</h1>
-                        <h2 style={h2Style}>{rental.location}</h2>
-                        <TagContainer>{tags}</TagContainer>
-                    </TitleContainer>
-                    <HostAndRatingContainer>
-                        <HostContainer>
-                            <h2>{rental.host.name}</h2>
-                            <HostPicContainer>
-                                <img src={rental.host.picture} alt={rental.host.name} className='hostPic'></img>
-                            </HostPicContainer>
-                        </HostContainer>
-                        <RatingContainer>
-                            {stars}
-                        </RatingContainer>
-                    </HostAndRatingContainer>
-                </HeaderContainer>
-                <AboutContainer>
-                    <About2Container ><CollapsibleCard  title={tab[0].title} description={tab[0].description} /></About2Container>
-                    <About2Container ><CollapsibleCard  title={tab[1].title} description={tab[1].description} /></About2Container>
-                </AboutContainer>
-            </div>
-        </PageContainer>
+        <div key={rental.id}>
+            <ImgContainer>
+                <img src={rental.cover} alt={rental.title}></img>
+            </ImgContainer>
+            <HeaderContainer>
+                <TitleContainer>
+                    <h1 style={h1Style}>{rental.title}</h1>
+                    <h2 style={h2Style}>{rental.location}</h2>
+                    <TagContainer>{tags}</TagContainer>
+                </TitleContainer>
+                <HostAndRatingContainer>
+                    <HostContainer>
+                        <h2>{rental.host.name}</h2>
+                        <HostPicContainer>
+                            <img src={rental.host.picture} alt={rental.host.name} className='hostPic'></img>
+                        </HostPicContainer>
+                    </HostContainer>
+                    <RatingContainer>
+                        {stars}
+                    </RatingContainer>
+                </HostAndRatingContainer>
+            </HeaderContainer>
+            <AboutContainer>
+                <About2Container ><CollapsibleCard title={tab[0].title} description={tab[0].description} /></About2Container>
+                <About2Container ><CollapsibleCard title={tab[1].title} description={tab[1].description} /></About2Container>
+            </AboutContainer>
+        </div>
     )
 }
 

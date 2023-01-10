@@ -1,0 +1,52 @@
+.carousel {
+    overflow: hidden;
+}
+
+.carousel__inner {
+    white-space: nowrap;
+    transition: transform 0.3s;
+}
+
+.carousel-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    background-color: green;
+    color: #FFF;
+}
+
+.indicators {
+    display: flex;
+    justify-content: center;
+}
+
+.indicators > button {
+    margin: 5px;
+}
+
+.indicators > button.active {
+    background-color: green;
+    color: #fff;
+}
+
+.item {
+    height: 100%;
+}
+.item .item__image img {
+    object-fit: contain;
+    height: 400px;
+}
+
+.miniature {
+    width: 200px;
+    height: 200px;
+    display: inline-flex;
+    align-items: flex-start;
+}
+
+.miniature .miniature__image {
+    object-fit: contain;
+    height: 200px;
+    width: 200px;
+}
